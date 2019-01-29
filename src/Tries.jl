@@ -37,4 +37,23 @@ end
 set!( node::TrieNode{V}, size::Vector{Int}, v::V, index::Int ) where {V} =
     node.data[index] = v
 
+function Base.getindex( head::TrieHead{V,T}, indices::Int... ) where {V,T}
+    if ismissing( head.data[indices[1]] )
+        return head.default
+    else
+        return get( head.data[indices[1]], head.default, indices[2:end]... )
+    end
+end
+
+function get( node::TrieNode{TrieNode{T}}, v::V, indices::Int... ) where {T,V}
+    if ismissing( node.data[indices[1]] )
+        return v
+    else
+        return get( node.data[indices[1]], v, indices[2:end]... )
+    end
+end
+
+get( node::TrieNode{T}, v::V, indices::Int... ) where {T,V} =
+    ismissing( node.data[indices[1]] ) ? v : node.data[indices[1]]
+
 end # module
