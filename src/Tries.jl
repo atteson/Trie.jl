@@ -20,22 +20,21 @@ TrieType( V::DataType, size::Int... ) =
 Trie( default::V, size::Int... ) where {V} =
     TrieHead( [size...], default, Vector{Union{TrieType( V, size[2:end]... ),Missing}}(missing, size[1]) )
 
-function Base.setindex!( head::TrieHead{V,T}, v::V, indices::Int... ) where {V,T}
+function Base.setindex!( head::TrieHead{V,TrieNode{T}}, v::V, indices::Int... ) where {V,T}
     if ismissing(head.data[indices[1]])
         head.data[indices[1]] = TrieNode( Vector{Union{Missing,T}}( missing, head.size[1] ) )
     end
-    set!( head.data[indices[1]], head.size[2:end], v, indices[2:end] )
+    set!( head.data[indices[1]], head.size[2:end], v, indices[2:end]... )
 end
 
-function set!( node::TrieNode{T}, size::Vector{Int}, v::V, indices::Int... ) where {T,V}
-    if isempty(size)
-        node.data[indices[1]] = v
-    else
-        if ismissing( node.data[indices[1]] )
-            node.data[indices[1]] = Vector{Union{Missing,T}}( missing, size[1] )
-        end
-        set!( node.data[indices[1]], size[2:end], v, indices[2:end] )
+function set!( node::TrieNode{TrieNode{T}}, size::Vector{Int}, v::V, indices::Int... ) where {T,V}
+    if ismissing( node.data[indices[1]] )
+        node.data[indices[1]] = TrieNode( Vector{Union{Missing,T}}( missing, size[1] ) )
     end
+    set!( node.data[indices[1]], size[2:end], v, indices[2:end]... )
 end
+
+set!( node::TrieNode{V}, size::Vector{Int}, v::V, index::Int ) where {V} =
+    node.data[index] = v
 
 end # module
