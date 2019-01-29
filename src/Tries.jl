@@ -1,5 +1,7 @@
 module Tries
 
+export Trie
+
 # The Trie's in DataStructures.jl only seem to allow strings for keys
 # We're going to assume Vector{Int} for keys and fixed maximum in each dimension
 mutable struct TrieHead{V,T}
@@ -12,11 +14,11 @@ struct TrieNode{T}
     data::Vector{Union{Missing,T}}
 end
 
-TrieType( size::Vector{Int}, vt::DataType ) =
-    isempty(size) ? vt : TrieType( size[2:end], TrieNode{vt} )
+TrieType( V::DataType, size::Int... ) =
+    isempty(size) ? V : TrieType( TrieNode{V}, size[2:end]... )
 
-Trie( default::V, size::Vector{Int} ) where {V} =
-    TrieHead( size, default, Vector{Union{TrieType( size[2:end], V ),Missing}}(missing, size[1]) )
+Trie( default::V, size::Int... ) where {V} =
+    TrieHead( [size...], default, Vector{Union{TrieType( V, size[2:end]... ),Missing}}(missing, size[1]) )
 
 function Base.setindex!( head::TrieHead{V,T}, v::V, indices::Int... ) where {V,T}
     if ismissing(head.data[indices[1]])
