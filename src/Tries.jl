@@ -1,4 +1,4 @@
-module Trie
+module Tries
 
 # The Trie's in DataStructures.jl only seem to allow strings for keys
 # We're going to assume Vector{Int} for keys and fixed maximum in each dimension
@@ -15,7 +15,7 @@ end
 TrieType( size::Vector{Int}, vt::DataType ) =
     isempty(size) ? vt : TrieType( size[2:end], TrieNode{vt} )
 
-Trie( size::Vector{Int}, default::V ) where {V} =
+Trie( default::V, size::Vector{Int} ) where {V} =
     TrieHead( size, default, Vector{Union{TrieType( size[2:end], V ),Missing}}(missing, size[1]) )
 
 function Base.setindex!( head::TrieHead{V,T}, v::V, indices::Int... ) where {V,T}
