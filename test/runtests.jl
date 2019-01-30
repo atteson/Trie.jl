@@ -56,6 +56,18 @@ end
 @time sum(t)
 @time sum(t)
 
+indices1 = div.( indices, 10_000 ) .+ 1;
+indices2 = mod.(div.( indices, 100 ), 100 ) .+ 1;
+indices3 = mod.( indices .- 1, 100 ) .+ 1;
+
+function set( t::Tries.TrieHead, indices1, indices2, indices3 )
+    for i = 1:length(indices1)
+        t[indices1[i], indices2[i], indices3[i]] = rand()
+    end
+end
+
+@time set( t, indices1, indices2, indices3 )
+
 # an alternate possible representation
 function f( a, indices )
     s = 0.0
