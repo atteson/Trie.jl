@@ -37,7 +37,7 @@ function setup()
     return (a,sort(allindices),b,t)
 end
 
-function Base.sum( t::Tries.TrieHead )
+function Base.sum( t::Tries.Trie )
     s = 0.0
     for i = 1:100
         for j = 1:100
@@ -60,7 +60,7 @@ indices1 = div.( indices, 10_000 ) .+ 1;
 indices2 = mod.(div.( indices, 100 ), 100 ) .+ 1;
 indices3 = mod.( indices .- 1, 100 ) .+ 1;
 
-function set( t::Tries.TrieHead, indices1, indices2, indices3 )
+function set( t::Tries.Trie, indices1, indices2, indices3 )
     for i = 1:length(indices1)
         t[indices1[i], indices2[i], indices3[i]] = rand()
     end
