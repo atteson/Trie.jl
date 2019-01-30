@@ -67,6 +67,7 @@ function set( t::Tries.TrieHead, indices1, indices2, indices3 )
 end
 
 @time set( t, indices1, indices2, indices3 )
+@time set( t, indices1, indices2, indices3 )
 
 # an alternate possible representation
 function f( a, indices )
