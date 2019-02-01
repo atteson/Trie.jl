@@ -69,6 +69,9 @@ end
 @time set( t, indices1, indices2, indices3 )
 @time set( t, indices1, indices2, indices3 )
 
+t = Trie( 0.0, 8, 2, 100000 )
+t[1,1,3] = 1.0
+
 # an alternate possible representation
 function f( a, indices )
     s = 0.0

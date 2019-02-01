@@ -30,14 +30,14 @@ Base.copy( node::TrieNode{T} ) where {T} =
 
 @inline function Base.setindex!( head::Trie{V,TrieNode{T},N}, v::V, indices::Int... ) where {V,T,N}
     if ismissing(head.data[indices[1]])
-        head.data[indices[1]] = TrieNode( Vector{Union{Missing,T}}( missing, head.size[1] ) )
+        head.data[indices[1]] = TrieNode( Vector{Union{Missing,T}}( missing, head.size[2] ) )
     end
     set!( head.data[indices[1]], head.size, v, 2, indices... )
 end
 
 @inline function set!( node::TrieNode{TrieNode{T}}, size::NTuple{N,Int}, v::V, n::Int, indices::Int... ) where {V,T,N}
     if ismissing( node.data[indices[n]] )
-        node.data[indices[n]] = TrieNode( Vector{Union{Missing,T}}( missing, size[n] ) )
+        node.data[indices[n]] = TrieNode( Vector{Union{Missing,T}}( missing, size[n+1] ) )
     end
     set!( node.data[indices[n]], size, v, n+1, indices... )
 end
